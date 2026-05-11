@@ -1,0 +1,64 @@
+# =============================================================================
+# Nine event categories used by the RAG agent.  Keep keys in English (used as
+# the database/foreign-key value) and labels in Chinese (used in prompts &
+# reports).
+#
+# The `keywords` are surface anchors that:
+#   1. Boost recall in the embedding-based retrieval step.
+#   2. Drive the rule-based MockLLM (see core/llm/mock_provider.py).
+#   3. Show up in user-facing reports as "matched on ..." rationale.
+# =============================================================================
+events:
+  suspension:
+    label: "停牌"
+    severity: 1.0
+    keywords: [停牌, 暂停交易, 暂停上市, 重大事项停牌]
+    description: 上市公司因待披露事项而停牌，期间无法平仓。
+
+  restructure:
+    label: "重大资产重组"
+    severity: 0.7
+    keywords: [重大资产重组, 重组, 购买资产, 出售资产, 借壳]
+    description: 上市公司发起重大资产重组事项，价格可能出现剧烈跳动。
+
+  private_placement:
+    label: "定增/非公开发行"
+    severity: 0.5
+    keywords: [定增, 非公开发行, 定向增发, 募集资金, 配股]
+    description: 上市公司向特定对象发行股票，常伴随股价短期承压。
+
+  earnings_warning:
+    label: "业绩预告/快报"
+    severity: 0.7
+    keywords: [业绩预告, 业绩快报, 净利润同比下降, 预亏, 扭亏, 预增]
+    description: 业绩预告/快报披露，可能触发盈利预期重估。
+
+  shareholder_reduction:
+    label: "股东减持"
+    severity: 0.4
+    keywords: [减持, 拟减持, 股份减持, 大股东减持]
+    description: 大股东/董监高减持，常伴随短期供给冲击。
+
+  litigation:
+    label: "重大诉讼"
+    severity: 0.5
+    keywords: [重大诉讼, 诉讼, 仲裁, 起诉, 法院]
+    description: 涉及重大诉讼/仲裁，可能产生或有负债。
+
+  fraud_investigation:
+    label: "财务造假/证监会立案"
+    severity: 1.0
+    keywords: [立案, 证监会立案, 信息披露违法, 财务造假, 稽查, 处罚]
+    description: 监管立案调查或财务造假指控，下行风险极高。
+
+  equity_change:
+    label: "股权变动/实控人变更"
+    severity: 0.5
+    keywords: [实际控制人变更, 实控人变更, 控股股东变更, 股权变动, 协议转让]
+    description: 控股权或实控人发生变更，公司战略可能出现转向。
+
+  other:
+    label: "其他"
+    severity: 0.1
+    keywords: []
+    description: 不属于以上类别的常规公告（不触发风控）。
