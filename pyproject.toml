@@ -1,0 +1,136 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "event-driven-pairs-trading-cn"
+version = "0.1.0"
+description = "Event-driven cointegration pairs trading system for A-share market with LLM-powered announcement RAG risk overlay."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Antonio-cccj" }]
+requires-python = ">=3.10"
+keywords = [
+    "quantitative-finance",
+    "a-share",
+    "pairs-trading",
+    "cointegration",
+    "event-driven",
+    "rag",
+    "llm-agent",
+    "mcp",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Financial and Insurance Industry",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Office/Business :: Financial :: Investment",
+]
+
+dependencies = [
+    # Core scientific stack
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "scipy>=1.11",
+    "statsmodels>=0.14",
+    "scikit-learn>=1.4",
+    # IO / config
+    "pydantic>=2.5",
+    "pydantic-settings>=2.1",
+    "python-dotenv>=1.0",
+    "pyyaml>=6.0",
+    "sqlalchemy>=2.0",
+    "loguru>=0.7",
+    # Plotting
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+    # Data sources (optional but lightweight)
+    "akshare>=1.12",
+    "tushare>=1.4; python_version<'3.13'",
+    # HTTP
+    "httpx>=0.27",
+    "tenacity>=8.2",
+    # Scheduling
+    "apscheduler>=3.10",
+]
+
+[project.optional-dependencies]
+llm = [
+    "anthropic>=0.40",
+    "openai>=1.40",
+    "zhipuai>=2.1",
+    "ollama>=0.3",
+]
+rag = [
+    "chromadb>=0.5",
+    "sentence-transformers>=3.0",
+    "transformers>=4.40",
+    "torch>=2.2",
+]
+mcp = [
+    "mcp>=1.0",
+]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-mock>=3.12",
+    "ruff>=0.6",
+    "black>=24.8",
+    "mypy>=1.10",
+    "ipykernel>=6.29",
+    "jupyter>=1.0",
+]
+all = [
+    "event-driven-pairs-trading-cn[llm,rag,mcp,dev]",
+]
+
+[project.urls]
+Homepage = "https://github.com/Antonio-cccj/event-driven-pairs-trading-cn"
+Repository = "https://github.com/Antonio-cccj/event-driven-pairs-trading-cn"
+Issues = "https://github.com/Antonio-cccj/event-driven-pairs-trading-cn/issues"
+
+[project.scripts]
+edpt-init-db = "scripts.init_db:main"
+edpt-backtest = "scripts.run_backtest:main"
+edpt-event-agent = "scripts.run_event_agent:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["core*", "strategy*", "backtest*", "agents*", "scripts*"]
+exclude = ["tests*", "notebooks*", "docs*", "data*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "C4", "SIM"]
+ignore = [
+    "E501",  # handled by black
+    "E731",  # lambda assignments are intentional in cost models
+    "F841",  # tolerate occasional unused locals in research scripts
+    "UP012", # ".encode('utf-8')" is more explicit
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "slow: marks tests as slow",
+    "network: requires network access",
+    "llm: requires an LLM API key",
+]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = true
+disallow_untyped_defs = false
