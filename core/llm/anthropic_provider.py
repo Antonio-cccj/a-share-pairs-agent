@@ -18,7 +18,9 @@ class AnthropicProvider(LLMProvider):
 
     name = "anthropic"
 
-    def __init__(self, api_key: str, model: str, temperature: float = 0.0, max_tokens: int = 2048) -> None:
+    def __init__(
+        self, api_key: str, model: str, temperature: float = 0.0, max_tokens: int = 2048
+    ) -> None:
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
         if not api_key:
             raise ValueError("ANTHROPIC_API_KEY is empty")

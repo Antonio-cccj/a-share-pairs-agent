@@ -13,13 +13,16 @@ def test_full_sample_pipeline(monkeypatch, tmp_path):
     monkeypatch.setenv("LOG_DIR", str(tmp_path / "logs"))
     # Reload settings after env mutation.
     from core import config
+
     config.reload_settings()
 
     from scripts.init_db import main as init_main
     from scripts.run_backtest import main as bt_main
 
     assert init_main(["--use-samples"]) == 0
-    rc = bt_main(["--use-samples", "--no-plot", "--out-dir", str(tmp_path / "out"), "--max-pairs", "10"])
+    rc = bt_main(
+        ["--use-samples", "--no-plot", "--out-dir", str(tmp_path / "out"), "--max-pairs", "10"]
+    )
     assert rc == 0
     # Metrics file exists and parses to non-empty dict.
     import json

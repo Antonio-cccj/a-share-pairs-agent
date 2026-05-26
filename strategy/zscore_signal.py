@@ -34,8 +34,8 @@ class SignalConfig:
     open_z: float = 2.0
     close_z: float = 0.5
     stop_z: float = 3.5
-    rolling: int = 60          # window for mean/std
-    min_history: int = 60      # bars needed before any trade
+    rolling: int = 60  # window for mean/std
+    min_history: int = 60  # bars needed before any trade
 
 
 def generate_signals(

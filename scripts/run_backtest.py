@@ -89,7 +89,9 @@ def main(argv: list[str] | None = None) -> int:
     # Persist artefacts.
     summary = result.summary()
     log.info("metrics: {}", summary)
-    (args.out_dir / "metrics.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
+    (args.out_dir / "metrics.json").write_text(
+        json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8"
+    )
     result.equity.to_csv(args.out_dir / "equity.csv", header=["equity"])
     result.returns.to_csv(args.out_dir / "returns.csv", header=["ret"])
     result.positions.to_csv(args.out_dir / "positions.csv", index=False)

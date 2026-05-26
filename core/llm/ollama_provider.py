@@ -19,7 +19,9 @@ log = get_logger(__name__)
 class OllamaProvider(LLMProvider):
     name = "ollama"
 
-    def __init__(self, base_url: str, model: str, temperature: float = 0.1, max_tokens: int = 2048) -> None:
+    def __init__(
+        self, base_url: str, model: str, temperature: float = 0.1, max_tokens: int = 2048
+    ) -> None:
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
         self.base_url = base_url.rstrip("/")
 

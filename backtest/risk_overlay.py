@@ -24,15 +24,15 @@ log = get_logger(__name__)
 # Mapping from taxonomy key -> default severity weight used when the agent
 # omits an explicit severity.  Higher = more disruptive.
 DEFAULT_SEVERITY: dict[str, float] = {
-    "suspension":          1.0,
+    "suspension": 1.0,
     "fraud_investigation": 1.0,
-    "restructure":         0.7,
-    "private_placement":   0.5,
-    "earnings_warning":    0.7,
+    "restructure": 0.7,
+    "private_placement": 0.5,
+    "earnings_warning": 0.7,
     "shareholder_reduction": 0.4,
-    "litigation":          0.5,
-    "equity_change":       0.5,
-    "other":               0.1,
+    "litigation": 0.5,
+    "equity_change": 0.5,
+    "other": 0.1,
 }
 
 

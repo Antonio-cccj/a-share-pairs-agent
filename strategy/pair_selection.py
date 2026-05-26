@@ -74,7 +74,9 @@ def screen_pairs(
         log.warning("price pivot is empty after filtering")
         return []
 
-    industry_map = stocks.set_index("ts_code")["industry"].to_dict() if "industry" in stocks.columns else {}
+    industry_map = (
+        stocks.set_index("ts_code")["industry"].to_dict() if "industry" in stocks.columns else {}
+    )
     if same_industry_only:
         groups: dict[str, list[str]] = {}
         for code in wide.columns:

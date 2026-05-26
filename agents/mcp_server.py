@@ -60,7 +60,9 @@ def _build_server():
         n = agent.run_batch(start=start, endd=end)
         return {"classified": n, "start": start, "end": end}
 
-    log.info("MCP server registered tools: classify_announcement, list_event_types, run_event_batch")
+    log.info(
+        "MCP server registered tools: classify_announcement, list_event_types, run_event_batch"
+    )
     return mcp
 
 

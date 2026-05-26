@@ -19,7 +19,9 @@ log = get_logger(__name__)
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--reindex", action="store_true", help="Re-embed announcements into Chroma first.")
+    parser.add_argument(
+        "--reindex", action="store_true", help="Re-embed announcements into Chroma first."
+    )
     parser.add_argument("--start", default=None)
     parser.add_argument("--end", default=None)
     args = parser.parse_args(argv)

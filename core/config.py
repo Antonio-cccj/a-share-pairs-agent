@@ -41,7 +41,9 @@ class Settings(BaseSettings):
     )
 
     # ------------------------------------------------------------------ Data
-    tushare_token: str = Field(default="", description="Tushare Pro token; leave empty to use akshare fallback.")
+    tushare_token: str = Field(
+        default="", description="Tushare Pro token; leave empty to use akshare fallback."
+    )
     data_cache_dir: Path = Field(default=Path("./data/cache"))
     database_url: str = Field(default="sqlite:///./data/edpt.sqlite")
 
@@ -113,7 +115,11 @@ def get_settings() -> Settings:
 def reload_settings() -> Settings:
     """Force a re-read of env vars (e.g. after monkeypatching in tests)."""
     get_settings.cache_clear()
-    return get_settings()
+    # Keep the module-level singleton in sync so `from core.config import settings`
+    # always reflects the latest environment after an explicit reload.
+    global settings
+    settings = get_settings()
+    return settings
 
 
 settings = get_settings()
