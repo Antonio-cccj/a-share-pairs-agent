@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from core.llm.mock_provider import MockLLM
 from core.llm import LLMMessage
+from core.llm.mock_provider import MockLLM
 
 
 def _classify(content: str) -> dict:
