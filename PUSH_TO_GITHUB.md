@@ -4,7 +4,7 @@ The repo has been git-init'd, committed, and is **ready to push**.  The agent
 could not run `gh repo create` itself (no GitHub CLI installed on the machine
 at build time), so pick **one** of the three options below to upload.
 
-The target repository name is **`Antonio-cccj/event-driven-pairs-trading-cn`**
+The target repository name is **`Antonio-cccj/a-share-pairs-agent`**
 (public).
 
 ---
@@ -24,7 +24,7 @@ Then:
 ```powershell
 cd "C:\Users\Anton\Desktop\Quantitative research\event-driven-pairs-trading-cn"
 gh auth login                  # browser-based OAuth
-gh repo create Antonio-cccj/event-driven-pairs-trading-cn --public --source=. --push
+gh repo create Antonio-cccj/a-share-pairs-agent --public --source=. --push
 ```
 
 That's it — the repo is online with CI auto-running.
@@ -36,7 +36,7 @@ That's it — the repo is online with CI auto-running.
 Create the empty repo at <https://github.com/new>:
 
 - Owner: `Antonio-cccj`
-- Repository name: `event-driven-pairs-trading-cn`
+- Repository name: `a-share-pairs-agent`
 - Visibility: Public
 - Leave **uncheck** "Initialize this repository with a README" (we already have one)
 
@@ -45,7 +45,7 @@ Then locally:
 ```powershell
 cd "C:\Users\Anton\Desktop\Quantitative research\event-driven-pairs-trading-cn"
 git branch -M main
-git remote add origin https://github.com/Antonio-cccj/event-driven-pairs-trading-cn.git
+git remote add origin https://github.com/Antonio-cccj/a-share-pairs-agent.git
 git push -u origin main
 ```
 
@@ -60,7 +60,7 @@ and paste it as the password.
 ```powershell
 cd "C:\Users\Anton\Desktop\Quantitative research\event-driven-pairs-trading-cn"
 git branch -M main
-git remote add origin git@github.com:Antonio-cccj/event-driven-pairs-trading-cn.git
+git remote add origin git@github.com:Antonio-cccj/a-share-pairs-agent.git
 git push -u origin main
 ```
 
@@ -71,9 +71,9 @@ Requires that your SSH key is uploaded to <https://github.com/settings/keys>.
 ## Sanity check after push
 
 ```powershell
-gh repo view Antonio-cccj/event-driven-pairs-trading-cn --web    # opens browser
+gh repo view Antonio-cccj/a-share-pairs-agent --web    # opens browser
 # or
-start https://github.com/Antonio-cccj/event-driven-pairs-trading-cn
+start https://github.com/Antonio-cccj/a-share-pairs-agent
 ```
 
 The GitHub Actions CI badge in `README.md` should turn green within ~5 minutes.

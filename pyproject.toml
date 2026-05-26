@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "event-driven-pairs-trading-cn"
+name = "a-share-pairs-agent"
 version = "0.1.0"
-description = "Event-driven cointegration pairs trading system for A-share market with LLM-powered announcement RAG risk overlay."
+description = "Event-aware A-share cointegration pairs trading agent with LLM-powered announcement RAG risk overlay."
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Antonio-cccj" }]
@@ -85,13 +85,13 @@ dev = [
     "jupyter>=1.0",
 ]
 all = [
-    "event-driven-pairs-trading-cn[llm,rag,mcp,dev]",
+    "a-share-pairs-agent[llm,rag,mcp,dev]",
 ]
 
 [project.urls]
-Homepage = "https://github.com/Antonio-cccj/event-driven-pairs-trading-cn"
-Repository = "https://github.com/Antonio-cccj/event-driven-pairs-trading-cn"
-Issues = "https://github.com/Antonio-cccj/event-driven-pairs-trading-cn/issues"
+Homepage = "https://github.com/Antonio-cccj/a-share-pairs-agent"
+Repository = "https://github.com/Antonio-cccj/a-share-pairs-agent"
+Issues = "https://github.com/Antonio-cccj/a-share-pairs-agent/issues"
 
 [project.scripts]
 edpt-init-db = "scripts.init_db:main"

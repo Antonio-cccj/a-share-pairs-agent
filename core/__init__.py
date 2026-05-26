@@ -1,4 +1,4 @@
-"""Core shared modules for the event-driven pairs trading system.
+"""Core shared modules for the A-share pairs agent.
 
 Submodules
 ----------

@@ -1,5 +1,5 @@
 -- =============================================================================
--- Database schema for event-driven-pairs-trading-cn
+-- Database schema for a-share-pairs-agent
 -- Compatible with SQLite (default) and PostgreSQL.
 -- Why a single SQL file? Keeps DDL versioned & reviewable; SQLAlchemy models
 -- mirror these tables in core/data/ingest.py.

@@ -1,18 +1,17 @@
-# MCP 集成 / MCP integration
+# MCP Integration
 
-本项目通过 `agents/mcp_server.py` 暴露 3 个工具：
+This project exposes three tools via `agents/mcp_server.py`:
 
-| 工具名 | 描述 |
+| Tool | Description |
 |---|---|
-| `classify_announcement` | 单条公告 → 9 类事件 JSON |
-| `list_event_types`      | 列出 9 类事件分类元数据 |
-| `run_event_batch`       | 对数据库内某个日期范围批量分类 |
+| `classify_announcement` | classify one announcement into a 9-event JSON output |
+| `list_event_types`      | return taxonomy metadata for all event categories |
+| `run_event_batch`       | run batch classification for a date range |
 
-## 一、Claude Desktop
+## 1. Claude Desktop
 
-在 `~/Library/Application Support/Claude/claude_desktop_config.json`
-（macOS）或 `%APPDATA%\Claude\claude_desktop_config.json`（Windows）
-中添加：
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
+or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
 
 ```json
 {
@@ -20,7 +19,7 @@
     "edpt": {
       "command": "python",
       "args": ["-m", "agents.mcp_server"],
-      "cwd": "/abs/path/to/event-driven-pairs-trading-cn",
+      "cwd": "/abs/path/to/a-share-pairs-agent",
       "env": {
         "LLM_PROVIDER": "anthropic",
         "ANTHROPIC_API_KEY": "sk-ant-..."
@@ -30,13 +29,13 @@
 }
 ```
 
-重启 Claude Desktop 之后，对话中即可调用：
+After restarting Claude Desktop, you can call tools like:
 
-> 帮我分析一下 “公司股票自2023年起停牌，等待重大事项披露。” 这条公告。
+> Classify this announcement: "Trading suspended pending material event disclosure."
 
-## 二、Cursor
+## 2. Cursor
 
-`~/.cursor/mcp.json` 或项目根目录 `.cursor/mcp.json`：
+Use `~/.cursor/mcp.json` or workspace `.cursor/mcp.json`:
 
 ```json
 {
@@ -44,15 +43,16 @@
     "edpt": {
       "command": "python",
       "args": ["-m", "agents.mcp_server"],
-      "cwd": "/abs/path/to/event-driven-pairs-trading-cn"
+      "cwd": "/abs/path/to/a-share-pairs-agent"
     }
   }
 }
 ```
 
-## 三、Cline / 其他 MCP 客户端
+## 3. Other MCP clients
 
-任何遵守 [MCP 协议](https://modelcontextprotocol.io) 的客户端均可接入，
-本项目使用官方 `mcp` Python SDK 的 `FastMCP` 封装。
+Any client compatible with the [MCP protocol](https://modelcontextprotocol.io)
+can integrate with this server. The implementation uses `FastMCP` from the
+official Python SDK.
 
-> 没装 `mcp` 时直接 `import agents.mcp_server` 会优雅地打印安装指引而非崩溃。
+If `mcp` is not installed, importing `agents.mcp_server` exits gracefully with setup guidance.

@@ -1,18 +1,18 @@
-# 示例运行结果 / Sample run results
+# Sample Run Results
 
-> 业绩为内置 *合成数据* + *默认参数* 下的运行结果，仅用于演示流水线，
-> 不代表真实回测业绩，不构成投资建议。
+> Metrics below are produced from synthetic sample data and default parameters.
+> They demonstrate pipeline behavior only, not live-trading performance.
 
-## 一、运行命令
+## 1. Run commands
 
 ```bash
 python scripts/init_db.py --use-samples
 python scripts/run_backtest.py --use-samples --max-pairs 10
 ```
 
-## 二、产出指标 (示例)
+## 2. Example metrics output
 
-`reports/output/metrics.json` 示例（一次合成数据运行）：
+`reports/output/metrics.json` sample:
 
 ```json
 {
@@ -30,13 +30,14 @@ python scripts/run_backtest.py --use-samples --max-pairs 10
 }
 ```
 
-**注意**：合成数据的协整关系是“刻意嵌入”的，因此 Sharpe 偏高；
-真实 A 股数据上业绩会显著低于此值。
+Synthetic data contains intentionally structured relationships, so Sharpe can be inflated
+relative to realistic market conditions.
 
-## 三、含事件叠加 / With event overlay
+## 3. With event overlay
 
 ```bash
 python scripts/run_backtest.py --use-samples --with-risk-overlay --max-pairs 10
 ```
 
-事件叠加会触发减仓/平仓，因此换手与成本上升，Sharpe 通常下降但 MDD 改善。
+The event overlay can reduce or flatten positions, typically increasing turnover and costs,
+while improving drawdown behavior in risk-heavy windows.

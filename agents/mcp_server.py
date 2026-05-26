@@ -32,7 +32,7 @@ def _build_server():
         ) from e
 
     agent = EventRAGAgent()
-    mcp = FastMCP("event-driven-pairs-trading-cn")
+    mcp = FastMCP("a-share-pairs-agent")
 
     @mcp.tool()
     def classify_announcement(title: str, content: str, ts_code: str = "") -> dict[str, Any]:
