@@ -88,7 +88,12 @@ class EventRAGAgent:
             raw = self.llm.extract_json(messages)
         except Exception as e:
             log.warning("LLM JSON parse failed for {}: {}", ts_code, e)
-            raw = {"event_type": "other", "severity": 0.1, "rationale": "parse_error", "confidence": 0.0}
+            raw = {
+                "event_type": "other",
+                "severity": 0.1,
+                "rationale": "parse_error",
+                "confidence": 0.0,
+            }
 
         event_type = str(raw.get("event_type", "other"))
         if event_type not in self.taxonomy:
@@ -97,9 +102,7 @@ class EventRAGAgent:
         rationale = str(raw.get("rationale", ""))
         confidence = float(raw.get("confidence", 0.5))
 
-        event_id = hashlib.sha1(
-            f"{ts_code}|{title}|{event_type}".encode()
-        ).hexdigest()[:16]
+        event_id = hashlib.sha1(f"{ts_code}|{title}|{event_type}".encode()).hexdigest()[:16]
         return EventRecord(
             event_id=event_id,
             ann_id="",  # filled by run_batch
@@ -112,7 +115,9 @@ class EventRAGAgent:
             model=f"{self.llm.name}:{self.llm.model}",
         )
 
-    def run_batch(self, codes: list[str] | None = None, start: str | None = None, endd: str | None = None) -> int:
+    def run_batch(
+        self, codes: list[str] | None = None, start: str | None = None, endd: str | None = None
+    ) -> int:
         """Classify every announcement in the date range and persist results."""
         anns = self.ingest.load_announcements(codes=codes, start=start, endd=endd)
         if anns.empty:

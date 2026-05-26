@@ -32,7 +32,7 @@ def _build_server():
         ) from e
 
     agent = EventRAGAgent()
-    mcp = FastMCP("event-driven-pairs-trading-cn")
+    mcp = FastMCP("a-share-pairs-agent")
 
     @mcp.tool()
     def classify_announcement(title: str, content: str, ts_code: str = "") -> dict[str, Any]:
@@ -60,7 +60,9 @@ def _build_server():
         n = agent.run_batch(start=start, endd=end)
         return {"classified": n, "start": start, "end": end}
 
-    log.info("MCP server registered tools: classify_announcement, list_event_types, run_event_batch")
+    log.info(
+        "MCP server registered tools: classify_announcement, list_event_types, run_event_batch"
+    )
     return mcp
 
 

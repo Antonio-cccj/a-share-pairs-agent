@@ -27,7 +27,7 @@ log = get_logger(__name__)
 # Universe used in sample mode: 10 large-cap names spanning 4 industries.
 SAMPLE_UNIVERSE: list[dict] = [
     {"ts_code": "600519.SH", "name": "贵州茅台", "industry": "白酒"},
-    {"ts_code": "000858.SZ", "name": "五粮液",   "industry": "白酒"},
+    {"ts_code": "000858.SZ", "name": "五粮液", "industry": "白酒"},
     {"ts_code": "600036.SH", "name": "招商银行", "industry": "银行"},
     {"ts_code": "601318.SH", "name": "中国平安", "industry": "保险"},
     {"ts_code": "000333.SZ", "name": "美的集团", "industry": "家电"},
@@ -158,7 +158,10 @@ class SampleLoader:
             ("restructure", "公司拟通过发行股份及支付现金方式购买资产，构成重大资产重组。"),
             ("private_placement", "公司拟向特定对象非公开发行股票，募集资金不超过30亿元。"),
             ("earnings_warning", "公司预计本报告期归属于上市公司股东的净利润同比下降50%以上。"),
-            ("shareholder_reduction", "公司控股股东计划自公告披露之日起15个交易日后减持公司股份不超过3%。"),
+            (
+                "shareholder_reduction",
+                "公司控股股东计划自公告披露之日起15个交易日后减持公司股份不超过3%。",
+            ),
             ("litigation", "公司及子公司近期涉及多项重大诉讼事项，涉及金额合计超过10亿元。"),
             ("fraud_investigation", "公司收到中国证监会立案告知书，涉嫌信息披露违法违规。"),
             ("equity_change", "公司实际控制人发生变更，新实控人通过协议转让取得控制权。"),
@@ -192,13 +195,13 @@ def _industry_regime(ind: str) -> tuple[float, float]:
     """Return (daily_mu, daily_sigma) for an industry."""
     # These are coarse but produce visually distinct trajectories.
     table = {
-        "白酒":   (4e-4, 0.018),
-        "银行":   (1e-4, 0.012),
-        "保险":   (2e-4, 0.014),
-        "家电":   (3e-4, 0.016),
-        "医药":   (3e-4, 0.020),
-        "食品":   (2e-4, 0.014),
-        "Other":  (2e-4, 0.018),
+        "白酒": (4e-4, 0.018),
+        "银行": (1e-4, 0.012),
+        "保险": (2e-4, 0.014),
+        "家电": (3e-4, 0.016),
+        "医药": (3e-4, 0.020),
+        "食品": (2e-4, 0.014),
+        "Other": (2e-4, 0.018),
     }
     return table.get(ind, table["Other"])
 

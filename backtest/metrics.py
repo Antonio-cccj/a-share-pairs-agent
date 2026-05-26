@@ -17,7 +17,7 @@ TRADING_DAYS = 244
 
 @dataclass
 class PerformanceMetrics:
-    cagr: float           # compound annual growth rate
+    cagr: float  # compound annual growth rate
     annual_vol: float
     sharpe: float
     sortino: float
@@ -26,7 +26,7 @@ class PerformanceMetrics:
     win_rate: float
     avg_win_loss: float
     n_trades: int
-    turnover: float       # average annualised turnover (sum(|d|) / equity)
+    turnover: float  # average annualised turnover (sum(|d|) / equity)
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -86,7 +86,9 @@ def compute_metrics(
         n_trades = int(len(trades_arr))
 
     annualised_turnover = (
-        float(turnover.mean() * TRADING_DAYS) if turnover is not None and not turnover.empty else 0.0
+        float(turnover.mean() * TRADING_DAYS)
+        if turnover is not None and not turnover.empty
+        else 0.0
     )
 
     return PerformanceMetrics(

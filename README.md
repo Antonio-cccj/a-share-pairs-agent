@@ -1,33 +1,32 @@
 <!--
-README - Chinese (default).
-The mirrored English version lives at README.en.md.
-Please keep both in sync when editing.
+README - default English version.
 -->
 
-# event-driven-pairs-trading-cn
+# a-share-pairs-agent
 
-[![CI](https://github.com/Antonio-cccj/event-driven-pairs-trading-cn/actions/workflows/ci.yml/badge.svg)](https://github.com/Antonio-cccj/event-driven-pairs-trading-cn/actions/workflows/ci.yml)
+[![CI](https://github.com/Antonio-cccj/a-share-pairs-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/Antonio-cccj/a-share-pairs-agent/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Last commit](https://img.shields.io/github/last-commit/Antonio-cccj/event-driven-pairs-trading-cn)](https://github.com/Antonio-cccj/event-driven-pairs-trading-cn/commits/main)
+[![Last commit](https://img.shields.io/github/last-commit/Antonio-cccj/a-share-pairs-agent)](https://github.com/Antonio-cccj/a-share-pairs-agent/commits/main)
 
-> 中文 | [English](README.en.md)
+> English | [简体中文](README.zh.md)
 
-> **事件驱动的 A 股协整配对交易系统** —— 基于协整检验 + Z-Score 阈值的配对交易，叠加由 ChromaDB + BGE-large-zh + LLM Agent 构成的 RAG 公告事件识别风险层。
+> **Event-aware A-share cointegration pairs trading agent** with a ChromaDB + BGE-large-zh + LLM Agent powered announcement risk overlay.
 
 ---
 
-## 一、项目背景
+## 1. Project Overview
 
-成对交易（Pairs Trading）是经典的市场中性策略，但 A 股市场的 *事件驱动* 风险（停牌、定增、立案、减持等）会让原本稳定的协整关系突然失效，导致策略回撤。本项目把：
+Pairs trading is a classic market-neutral strategy, but in A-share markets, event shocks (suspensions, regulatory probes, shareholder sell-downs, private placements) can break cointegration relationships abruptly.  
+This project combines:
 
-1. **传统协整 + Z-Score** 信号引擎
-2. **基于 RAG + LLM Agent** 的公告事件实时识别
-3. **可配置的风险叠加层**
+1. A **cointegration + Z-score** signal engine
+2. A **RAG + LLM announcement intelligence agent**
+3. A **risk overlay** that can cut or flatten exposure
 
-整合到一个可端到端运行的开源框架中，让读者既能复现量化策略的基础回测，也能体验 *如何用大模型给传统量化策略做风险风控加层*。
+The repository is built to run end-to-end with sample data and a mock LLM, so readers can evaluate your Agent architecture and workflow design without API keys.
 
-## 二、整体架构
+## 2. Architecture
 
 ```mermaid
 flowchart TB
@@ -65,128 +64,125 @@ flowchart TB
     Engine --> Out[Metrics / Equity / Charts]
 ```
 
-## 三、核心模块
+## 3. Core Modules
 
-| 模块 | 文件 | 描述 |
+| Module | Path | Purpose |
 |---|---|---|
-| 协整检验 | `strategy/cointegration.py` | Engle-Granger + Johansen + 半衰期估计 |
-| 配对筛选 | `strategy/pair_selection.py` | 行业内成对组合，p-value 与半衰期过滤 |
-| Z-Score 信号 | `strategy/zscore_signal.py` | 开仓 ±2.0σ / 平仓 ±0.5σ / 止损 ±3.5σ |
-| 仓位构建 | `strategy/dollar_neutral.py` | Beta 中性 + Dollar-Neutral |
-| 回测引擎 | `backtest/engine.py` | 向量化日频，多对组合 |
-| 成本模型 | `backtest/costs.py` | 万三佣金 + 千一印花税 + 5bp 滑点 |
-| 风险叠加 | `backtest/risk_overlay.py` | 9 类事件触发减仓/平仓 |
-| 事件 Agent | `agents/event_rag_agent.py` | RAG 检索 + LLM 分类 |
-| MCP Server | `agents/mcp_server.py` | 对接 Claude Desktop / Cursor |
-| LLM 抽象 | `core/llm/*.py` | Anthropic / OpenAI / DeepSeek / Zhipu / Ollama / Mock |
-| 向量库 | `core/rag/chroma_store.py` | ChromaDB 持久化 + numpy fallback |
-| 数据层 | `core/data/*.py` | Tushare → akshare → 离线样本三级 fallback |
+| Cointegration | `strategy/cointegration.py` | Engle-Granger + Johansen + half-life |
+| Pair screening | `strategy/pair_selection.py` | Same-industry pair candidates + p-value/half-life filters |
+| Z-score signal | `strategy/zscore_signal.py` | Open ±2.0 sigma / Close ±0.5 sigma / Stop ±3.5 sigma |
+| Position sizing | `strategy/dollar_neutral.py` | Beta-neutral + dollar-neutral |
+| Backtest engine | `backtest/engine.py` | Vectorized daily multi-pair backtest |
+| Cost model | `backtest/costs.py` | 3 bps commission + 10 bps stamp duty + 5 bps slippage |
+| Risk overlay | `backtest/risk_overlay.py` | Event-aware exposure throttle and flatten |
+| Event agent | `agents/event_rag_agent.py` | RAG retrieval + LLM classification |
+| MCP server | `agents/mcp_server.py` | Claude Desktop / Cursor integration |
+| LLM adapter | `core/llm/*.py` | Anthropic / OpenAI / DeepSeek / Zhipu / Ollama / Mock |
+| Vector store | `core/rag/chroma_store.py` | ChromaDB persistent + numpy fallback |
+| Data layer | `core/data/*.py` | Tushare -> akshare -> sample fallback |
 
-## 四、快速开始（5 分钟）
+## 4. Quick Start (5 minutes)
 
 ```bash
-# 1. 克隆
-git clone https://github.com/Antonio-cccj/event-driven-pairs-trading-cn.git
-cd event-driven-pairs-trading-cn
+# 1. Clone
+git clone https://github.com/Antonio-cccj/a-share-pairs-agent.git
+cd a-share-pairs-agent
 
-# 2. 安装（推荐 Python 3.10–3.12）
+# 2. Install (Python 3.10-3.12 recommended)
 python -m venv .venv
 .venv\Scripts\activate    # Windows
 # source .venv/bin/activate # Linux/Mac
 pip install -e ".[dev]"
 
-# 3. 拷贝并填写环境变量
+# 3. Copy env and fill credentials if needed
 cp .env.example .env
-# 编辑 .env，至少填一项 LLM_PROVIDER（mock 也可以）
+# You can keep LLM_PROVIDER=mock for zero-API run
 
-# 4. 用内置样本数据初始化数据库 + 跑回测
+# 4. Run sample pipeline
 python scripts/init_db.py --use-samples
 python scripts/run_backtest.py --use-samples --max-pairs 10
 
-# 5. （可选）启动 MCP Server 给 Claude Desktop / Cursor 用
+# 5. Optional: launch MCP server
 python -m agents.mcp_server
 ```
 
-**完全无 API 模式**：上面的命令在 `LLM_PROVIDER=mock` 与无 Tushare token 时也能跑通——使用规则式事件分类 + 合成 OHLCV 样本。
+**Zero-API mode**: this works with `LLM_PROVIDER=mock` and no Tushare token.
 
-## 五、API 申请指引
+## 5. API Onboarding
 
-| 服务 | 是否必填 | 申请地址 | 备注 |
+| Service | Required | URL | Notes |
 |---|---|---|---|
-| **Tushare Pro** | 否（有 akshare 兜底） | <https://tushare.pro> | 注册后积分 ≥ 2000 可拉全市场行情 |
-| **Anthropic Claude** | 否（5 选 1） | <https://console.anthropic.com> | 海外信用卡 |
-| **DeepSeek** | 否 | <https://platform.deepseek.com> | 国内 LLM，性价比高 |
-| **Zhipu GLM** | 否 | <https://open.bigmodel.cn> | `glm-4-flash` 有免费额度 |
-| **Ollama** | 否 | <https://ollama.com> | 本地推理，推荐 `qwen2.5:7b` |
+| Tushare Pro | Optional | <https://tushare.pro> | akshare fallback is available |
+| Anthropic Claude | Optional | <https://console.anthropic.com> | |
+| DeepSeek | Optional | <https://platform.deepseek.com> | |
+| Zhipu GLM | Optional | <https://open.bigmodel.cn> | |
+| Ollama | Optional | <https://ollama.com> | local inference |
 
-在 `.env` 中只设置 `LLM_PROVIDER=<provider 名>` + 对应的 `*_API_KEY` 即可切换后端。
+Set `LLM_PROVIDER` and matching `*_API_KEY` values in `.env`.
 
-## 六、9 类风险事件分类
+## 6. Nine Event Types
 
-由 `agents/event_taxonomy.yaml` 定义，详见 [`docs/methodology.md`](docs/methodology.md)：
+Defined in `agents/event_taxonomy.yaml`, see [`docs/methodology.md`](docs/methodology.md):
 
-| key | 中文 | 默认严重度 |
+| key | label | default severity |
 |---|---|---|
-| suspension | 停牌 | 1.0 |
-| fraud_investigation | 财务造假/证监会立案 | 1.0 |
-| restructure | 重大资产重组 | 0.7 |
-| earnings_warning | 业绩预告/快报 | 0.7 |
-| private_placement | 定增/非公开发行 | 0.5 |
-| equity_change | 实控人变更 | 0.5 |
-| litigation | 重大诉讼 | 0.5 |
-| shareholder_reduction | 股东减持 | 0.4 |
-| other | 其他 | 0.1 |
+| suspension | trading suspension | 1.0 |
+| fraud_investigation | fraud or regulatory probe | 1.0 |
+| restructure | major restructuring | 0.7 |
+| earnings_warning | earnings warning | 0.7 |
+| private_placement | private placement | 0.5 |
+| equity_change | controlling shareholder change | 0.5 |
+| litigation | major litigation | 0.5 |
+| shareholder_reduction | major holder reduction | 0.4 |
+| other | routine announcements | 0.1 |
 
-## 七、示例输出（样本数据）
+## 7. Sample Outputs
 
-跑一次 `python scripts/run_backtest.py --use-samples` 之后，工件落在 `reports/output/`：
+After `python scripts/run_backtest.py --use-samples`, artifacts are saved in `reports/output/`:
 
-- `metrics.json` —— 业绩指标
-- `equity.csv` / `equity.png` —— 净值曲线
-- `returns.csv` —— 每日收益
-- `positions.csv` —— 长格式仓位明细
+- `metrics.json` - performance metrics
+- `equity.csv` / `equity.png` - equity curve
+- `returns.csv` - daily returns
+- `positions.csv` - long-format positions
 
-> **声明**：示例业绩为合成数据 + 默认参数运行结果，**仅用于演示流程**，不代表样本外真实业绩，不构成投资建议。
+> Disclaimer: sample performance uses synthetic data and default parameters for demonstration only.
 
-## 八、目录结构
+## 8. Directory Layout
 
 ```
-event-driven-pairs-trading-cn/
-├── core/                # 共享底座：config / logger / data / llm / rag
-├── strategy/            # 协整 + 配对 + Z-Score + 仓位
-├── backtest/            # 回测引擎、成本、指标、风险叠加
-├── agents/              # 事件 RAG Agent + MCP Server + 9 类事件分类
-├── scripts/             # CLI: init_db / run_backtest / run_event_agent
-├── tests/               # pytest（关键模块 + smoke test）
-├── notebooks/           # 03 个示例 Notebook
+a-share-pairs-agent/
+├── core/                # shared: config / logger / data / llm / rag
+├── strategy/            # cointegration + pair selection + signal + sizing
+├── backtest/            # engine, costs, metrics, risk overlay
+├── agents/              # event RAG agent + MCP server + taxonomy
+├── scripts/             # init_db / run_backtest / run_event_agent
+├── tests/               # pytest unit + smoke
+├── notebooks/           # example notebooks
 ├── docs/                # architecture / methodology / results / mcp_usage
-├── config/              # 默认参数 + universe.yaml
-├── .github/workflows/   # CI: ruff + pytest + smoke
-├── pyproject.toml       # 现代 PEP 621 打包
-└── .env.example         # 所有 API 占位符
+├── .github/workflows/   # CI
+├── pyproject.toml
+└── .env.example
 ```
 
-## 九、Roadmap
+## 9. Roadmap
 
-- [x] Phase 0–6：脚手架、底座、策略、Agent、测试、CI
-- [x] Phase 7：双语 README + Notebooks + docs
-- [ ] 接入真实 Tushare anns_d / 巨潮爬虫
-- [ ] LightGBM 信号筛选层
-- [ ] Web UI：Streamlit 实时跟踪
+- [x] Core scaffold, strategy, agent, tests, CI
+- [x] Documentation and notebooks
+- [ ] Live Tushare anns_d / CNINFO integration
+- [ ] LightGBM signal filter layer
+- [ ] Streamlit web UI
 
-## 十、引用
-
-如果这个项目对你的研究有帮助，请考虑引用：
+## 10. Citation
 
 ```bibtex
 @software{chu2026edpt,
   author    = {Chu, Jun},
-  title     = {event-driven-pairs-trading-cn: An event-driven pairs trading system with LLM RAG risk overlay},
+  title     = {a-share-pairs-agent: Event-aware A-share pairs trading agent with LLM RAG risk overlay},
   year      = {2026},
-  url       = {https://github.com/Antonio-cccj/event-driven-pairs-trading-cn}
+  url       = {https://github.com/Antonio-cccj/a-share-pairs-agent}
 }
 ```
 
-## 十一、License
+## 11. License
 
 [MIT License](LICENSE) © 2026 [Antonio-cccj](https://github.com/Antonio-cccj) (Jun Chu)

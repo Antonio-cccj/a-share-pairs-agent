@@ -99,7 +99,9 @@ class IngestService:
             # SQLite lacks ON CONFLICT for older versions; brute clear & insert.
             for code in df["ts_code"].unique():
                 conn.execute(
-                    text("DELETE FROM ohlcv_daily WHERE ts_code = :c AND trade_date BETWEEN :s AND :e"),
+                    text(
+                        "DELETE FROM ohlcv_daily WHERE ts_code = :c AND trade_date BETWEEN :s AND :e"
+                    ),
                     {"c": code, "s": start, "e": endd},
                 )
             df.to_sql(
@@ -221,7 +223,9 @@ class IngestService:
         log.warning("falling back to sample universe")
         return self.samples.stocks()
 
-    def _fetch_ohlcv(self, codes: list[str], start: str, endd: str, use_samples: bool) -> pd.DataFrame:
+    def _fetch_ohlcv(
+        self, codes: list[str], start: str, endd: str, use_samples: bool
+    ) -> pd.DataFrame:
         if use_samples:
             return self.samples.ohlcv(codes, start, endd)
         if self.tushare.available:

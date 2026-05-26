@@ -22,13 +22,13 @@ from core.llm.base import LLMMessage, LLMProvider
 # Tried in order; first match wins.
 _EVENT_KEYWORDS: list[tuple[str, list[str]]] = [
     ("fraud_investigation", ["立案", "证监会立案", "信息披露违法", "财务造假", "稽查"]),
-    ("suspension",          ["停牌", "暂停交易", "暂停上市"]),
-    ("restructure",         ["重大资产重组", "重组", "购买资产", "出售资产", "借壳"]),
-    ("private_placement",   ["定增", "非公开发行", "定向增发", "募集资金"]),
-    ("earnings_warning",    ["业绩预告", "净利润同比下降", "预亏", "扭亏", "业绩快报"]),
+    ("suspension", ["停牌", "暂停交易", "暂停上市"]),
+    ("restructure", ["重大资产重组", "重组", "购买资产", "出售资产", "借壳"]),
+    ("private_placement", ["定增", "非公开发行", "定向增发", "募集资金"]),
+    ("earnings_warning", ["业绩预告", "净利润同比下降", "预亏", "扭亏", "业绩快报"]),
     ("shareholder_reduction", ["减持", "拟减持", "股份减持"]),
-    ("litigation",          ["重大诉讼", "诉讼", "仲裁", "起诉"]),
-    ("equity_change",       ["实际控制人变更", "实控人变更", "控股股东变更", "股权变动"]),
+    ("litigation", ["重大诉讼", "诉讼", "仲裁", "起诉"]),
+    ("equity_change", ["实际控制人变更", "实控人变更", "控股股东变更", "股权变动"]),
 ]
 
 
@@ -41,7 +41,9 @@ class MockLLM(LLMProvider):
 
     name = "mock"
 
-    def __init__(self, model: str = "mock-rule-v1", temperature: float = 0.0, max_tokens: int = 1024) -> None:
+    def __init__(
+        self, model: str = "mock-rule-v1", temperature: float = 0.0, max_tokens: int = 1024
+    ) -> None:
         super().__init__(model=model, temperature=temperature, max_tokens=max_tokens)
 
     def chat(self, messages: list[LLMMessage], **kwargs: Any) -> str:

@@ -30,12 +30,12 @@ log = get_logger(__name__)
 
 @dataclass
 class BacktestResult:
-    equity: pd.Series          # portfolio NAV starting at 1.0
-    returns: pd.Series         # daily fractional returns
-    positions: pd.DataFrame    # tall: ['pair_id', 'date', 'pos', 'w_a', 'w_b']
-    pair_pnl: pd.DataFrame     # wide: per-pair daily PnL
+    equity: pd.Series  # portfolio NAV starting at 1.0
+    returns: pd.Series  # daily fractional returns
+    positions: pd.DataFrame  # tall: ['pair_id', 'date', 'pos', 'w_a', 'w_b']
+    pair_pnl: pd.DataFrame  # wide: per-pair daily PnL
     metrics: PerformanceMetrics
-    cost_drag_bps: float       # average annualised drag from costs
+    cost_drag_bps: float  # average annualised drag from costs
 
     def summary(self) -> dict:
         m = self.metrics.to_dict()
@@ -115,11 +115,17 @@ class BacktestEngine:
             # Cost: from change in notional (= turnover) per leg.
             dw_a = pos["w_a"].diff().fillna(pos["w_a"])
             dw_b = pos["w_b"].diff().fillna(pos["w_b"])
-            cost_series = self.cost_model.cost_per_turnover(dw_a) + self.cost_model.cost_per_turnover(dw_b)
+            cost_series = self.cost_model.cost_per_turnover(
+                dw_a
+            ) + self.cost_model.cost_per_turnover(dw_b)
             pnl_net = pnl - cost_series
 
             per_pair_pnl[pair.pair_id] = pnl_net
-            df_pos = pos.assign(pair_id=pair.pair_id).reset_index().rename(columns={"index": "trade_date"})
+            df_pos = (
+                pos.assign(pair_id=pair.pair_id)
+                .reset_index()
+                .rename(columns={"index": "trade_date"})
+            )
             per_pair_positions.append(df_pos)
             per_pair_turnover.append(dw_a.abs() + dw_b.abs())
             per_pair_cost.append(cost_series)
@@ -143,7 +149,9 @@ class BacktestEngine:
         positions_long = pd.concat(per_pair_positions, ignore_index=True)
         total_turnover = pd.concat(per_pair_turnover, axis=1).sum(axis=1) / self.initial_equity
         total_cost = pd.concat(per_pair_cost, axis=1).sum(axis=1)
-        cost_drag_bps = float(total_cost.sum() / self.initial_equity * 1e4 / max(1, len(port_ret) / 244))
+        cost_drag_bps = float(
+            total_cost.sum() / self.initial_equity * 1e4 / max(1, len(port_ret) / 244)
+        )
 
         metrics = compute_metrics(port_ret, turnover=total_turnover)
         log.info(

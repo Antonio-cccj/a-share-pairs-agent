@@ -54,6 +54,7 @@ class TushareClient:
             return False
         try:
             import tushare  # noqa: F401 - import test
+
             return True
         except Exception:
             return False
@@ -61,6 +62,7 @@ class TushareClient:
     def _ensure_pro(self) -> Any:
         if self._pro is None:
             import tushare as ts  # local import; optional dep
+
             ts.set_token(self._token)
             self._pro = ts.pro_api()
             log.info("tushare pro client initialised")
@@ -118,12 +120,16 @@ class TushareClient:
             return None
         self._throttle()
         pro = self._ensure_pro()
-        df = pro.daily(ts_code=ts_code, start_date=start.replace("-", ""), end_date=endd.replace("-", ""))
+        df = pro.daily(
+            ts_code=ts_code, start_date=start.replace("-", ""), end_date=endd.replace("-", "")
+        )
         if df is None or df.empty:
             return df
         # Adjust factor (may be slow for full-history queries; cache upstream).
         self._throttle()
-        adj = pro.adj_factor(ts_code=ts_code, start_date=start.replace("-", ""), end_date=endd.replace("-", ""))
+        adj = pro.adj_factor(
+            ts_code=ts_code, start_date=start.replace("-", ""), end_date=endd.replace("-", "")
+        )
         if adj is not None and not adj.empty:
             df = df.merge(adj[["trade_date", "adj_factor"]], on="trade_date", how="left")
         else:

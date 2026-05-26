@@ -27,6 +27,7 @@ class AkshareClient:
     def available(self) -> bool:
         try:
             import akshare  # noqa: F401
+
             return True
         except Exception:
             return False
@@ -83,7 +84,19 @@ class AkshareClient:
         df["ts_code"] = ts_code
         df["adj_factor"] = 1.0
         df["trade_date"] = pd.to_datetime(df["trade_date"]).dt.date
-        return df[["ts_code", "trade_date", "open", "high", "low", "close", "volume", "amount", "adj_factor"]]
+        return df[
+            [
+                "ts_code",
+                "trade_date",
+                "open",
+                "high",
+                "low",
+                "close",
+                "volume",
+                "amount",
+                "adj_factor",
+            ]
+        ]
 
 
 def _infer_ts_code(code: str) -> str:

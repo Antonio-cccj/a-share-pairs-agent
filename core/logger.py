@@ -104,5 +104,9 @@ def get_logger(name: str | None = None, **bindings: Any):
     >>> log.info("priced")
     """
     configure_logging()
-    bound = _logger.bind(name=name or "root", **bindings) if bindings else _logger.bind(name=name or "root")
+    bound = (
+        _logger.bind(name=name or "root", **bindings)
+        if bindings
+        else _logger.bind(name=name or "root")
+    )
     return bound

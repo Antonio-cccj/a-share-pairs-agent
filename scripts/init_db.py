@@ -26,7 +26,9 @@ log = get_logger(__name__)
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Initialise database & populate data")
-    parser.add_argument("--use-samples", action="store_true", help="Use synthetic samples (no API needed).")
+    parser.add_argument(
+        "--use-samples", action="store_true", help="Use synthetic samples (no API needed)."
+    )
     parser.add_argument("--start", default=settings.backtest_start)
     parser.add_argument("--end", default=settings.backtest_end)
     args = parser.parse_args(argv)
